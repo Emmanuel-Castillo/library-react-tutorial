@@ -5,15 +5,29 @@ import Books from "./pages/Books";
 import BookInfo from "./pages/BookInfo";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { books } from "./data";
+// import { books } from "./data";    //former fake data: now using api
 import Cart from "./pages/Cart";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+// import axios from "axios";
 
 function App() {
+  const [books, setBooks] = useState([]);
+
+  async function getBooks() {
+    const promise = await fetch("http://localhost:5000/api/data")
+    const response = await promise.json()
+    
+    setBooks(response.data);
+  }
+
+  useEffect(() => {
+    getBooks();
+  }, []);
+
   const [cart, setCart] = useState([]);
 
   function addToCart(book) {
-    setCart([...cart, { ...book, quantity: 1 }]);
+    setCart([...cart, { ...book, quantity: 1 , key: book.id}]);
   }
 
   function changeQuantity(book, quantity) {
@@ -29,23 +43,23 @@ function App() {
     );
   }
 
-  function removeItem(item){
-    setCart(cart.filter(book => book.id !== item.id))
+  function removeItem(item) {
+    setCart(cart.filter((book) => book.id !== item.id));
   }
 
-  function numberOfItems(){
-    let counter = 0
-    cart.forEach(item => {
-      counter += item.quantity
-    })
+  function numberOfItems() {
+    let counter = 0;
+    cart.forEach((item) => {
+      counter += item.quantity;
+    });
 
-    return counter
+    return counter;
   }
 
   return (
     <Router>
       <div className="App">
-        <Nav numberOfItems={numberOfItems()}/>
+        <Nav numberOfItems={numberOfItems()} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/books" element={<Books books={books} />} />
@@ -58,7 +72,11 @@ function App() {
           <Route
             path="/cart"
             element={
-              <Cart cart={cart} changeQuantity={changeQuantity} removeItem={removeItem} />
+              <Cart
+                cart={cart}
+                changeQuantity={changeQuantity}
+                removeItem={removeItem}
+              />
             }
           />
         </Routes>
