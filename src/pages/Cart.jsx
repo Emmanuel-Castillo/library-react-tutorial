@@ -1,14 +1,14 @@
 
 const Cart = ({cart, changeQuantity}) => {
 
-    const total = () => {
-        let price = 0
+    const subTotal = () => {
+        let price = 0.00
         cart.forEach(item => {
             price += +(
             (item.salePrice || item.originalPrice) * item.quantity
-            ).toFixed(2)
+            )
         })
-        return price
+        return price.toFixed(2)
     }
 
   return (
@@ -70,15 +70,15 @@ const Cart = ({cart, changeQuantity}) => {
                     <div className="total">
                         <div className="total__item total__sub-total">
                             <span>Subtotal</span>
-                            <span>${total() * .9}</span>
+                            <span>${subTotal()}</span>
                         </div>
                         <div className="total__item total__tax">
                             <span>Tax</span>
-                            <span>$1.00</span>
+                            <span>${(subTotal() * .1).toFixed(2)}</span>
                         </div>
                         <div className="total__item total__price">
                             <span>Total</span>
-                            <span>${total()}</span>
+                            <span>${(subTotal() * 1.1).toFixed(2)}</span>
                         </div>
                          <button className="btn btn__checkout no-cursor" onClick={() => alert("Haven't got around to doing this")}>
                             Proceed to checkout

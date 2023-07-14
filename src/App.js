@@ -7,7 +7,7 @@ import BookInfo from "./pages/BookInfo";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { books } from "./data";
 import Cart from "./pages/Cart";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -29,9 +29,9 @@ function App() {
     );
   }
 
-  useEffect(() => {
-    console.log(cart);
-  }, [cart]);
+  function removeItemFromCart(book) {
+    setCart()
+  }
 
   return (
     <Router>
